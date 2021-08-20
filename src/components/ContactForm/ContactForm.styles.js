@@ -8,6 +8,22 @@ export const FormStyled = styled.form`
   color: black;
 `;
 
+export const LabelStyled = styled.label`
+  display: block;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: black;
+`;
+
+export const InputStyled = styled.input`
+  width: 250px;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 2px solid green;
+  border-radius: 10px;
+`;
+
 export const SubmitButtonStyled = styled.button`
   display: flex;
   align-items: center;

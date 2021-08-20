@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import contactsActions from '../../redux/contactsActions';
 import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Input } from '../Input/Input';
-import { FormStyled, SubmitButtonStyled } from './ContactForm.styles';
+// import { Input } from '../Input/Input';
+import {
+  FormStyled,
+  LabelStyled,
+  InputStyled,
+  SubmitButtonStyled,
+} from './ContactForm.styles';
 
-export const ContactForm = ({ onSubmit }) => {
+const ContactForm = ({ onSubmit }) => {
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -39,15 +46,18 @@ export const ContactForm = ({ onSubmit }) => {
     resetForm();
   };
 
+  const nameInputId = uuidv4();
+  const numberInputId = uuidv4();
+
   return (
     <FormStyled onSubmit={submitForm}>
-      <Input
-        id={uuidv4()}
+      <LabelStyled htmlFor={nameInputId}>Name</LabelStyled>
+      <InputStyled
+        id={nameInputId}
         type={'text'}
-        label={'Name'}
         name={'name'}
         placeholder={'Jason Born'}
-        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         value={name}
         onChange={handleInputValues}
         title={
@@ -56,13 +66,13 @@ export const ContactForm = ({ onSubmit }) => {
         required={true}
       />
 
-      <Input
-        id={uuidv4()}
+      <LabelStyled htmlFor={numberInputId}>Number</LabelStyled>
+      <InputStyled
+        id={numberInputId}
         type={'tel'}
-        label={'Number'}
         name={'number'}
         placeholder={'+44-787-123-45-67'}
-        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         value={number}
         onChange={handleInputValues}
         title={
@@ -70,6 +80,21 @@ export const ContactForm = ({ onSubmit }) => {
         }
         required={true}
       />
+
+      {/* <Input
+        id={numberInputId}
+        type={'tel'}
+        label={'Number'}
+        name={'number'}
+        placeholder={'+44-787-123-45-67'}
+        // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        value={number}
+        onChange={handleInputValues}
+        title={
+          'Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +'
+        }
+        required={true}
+      /> */}
 
       <SubmitButtonStyled type="submit">Add contact</SubmitButtonStyled>
     </FormStyled>
@@ -79,3 +104,9 @@ export const ContactForm = ({ onSubmit }) => {
 ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
+
+const mapDispatchToProps = dispatch => ({
+  onSubmit: newContact => dispatch(contactsActions.addContact(newContact)),
+});
+
+export default connect(null, mapDispatchToProps)(ContactForm);
