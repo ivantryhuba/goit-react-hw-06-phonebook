@@ -13,10 +13,14 @@ export const ContactItemStyled = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+
   font-size: 16px;
   font-weight: 500;
   color: black;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
 `;
 
 export const RemoveBtnStyled = styled.button`
@@ -34,4 +38,11 @@ export const RemoveBtnStyled = styled.button`
   background-color: turquoise;
   border: 2px solid orangered;
   border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    border-color: black;
+    background-color: orangered;
+  }
 `;

@@ -37,7 +37,15 @@ export const SubmitButtonStyled = styled.button`
   font-size: 15px;
   font-weight: 700;
 
-  background-color: yellow;
+  background-color: orange;
   border: 2px solid green;
   border-radius: 20px;
+
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    border-color: orange;
+    background-color: green;
+  }
 `;

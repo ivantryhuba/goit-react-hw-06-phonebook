@@ -12,7 +12,7 @@ import {
   SubmitButtonStyled,
 } from './ContactForm.styles';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = ({ contacts, onSubmit }) => {
   const [id, setId] = useState('');
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -42,6 +42,17 @@ const ContactForm = ({ onSubmit }) => {
 
   const submitForm = evt => {
     evt.preventDefault();
+    if (
+      contacts.some(
+        contact =>
+          contact.name.toLowerCase() === evt.target.name.value.toLowerCase(),
+      )
+    ) {
+      alert(
+        'You have contact with this name, please remove old contact and create new',
+      );
+      return;
+    }
     onSubmit({ id, name, number });
     resetForm();
   };
@@ -57,7 +68,7 @@ const ContactForm = ({ onSubmit }) => {
         type={'text'}
         name={'name'}
         placeholder={'Jason Born'}
-        // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+        pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
         value={name}
         onChange={handleInputValues}
         title={
@@ -72,7 +83,7 @@ const ContactForm = ({ onSubmit }) => {
         type={'tel'}
         name={'number'}
         placeholder={'+44-787-123-45-67'}
-        // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
         value={number}
         onChange={handleInputValues}
         title={
@@ -81,21 +92,6 @@ const ContactForm = ({ onSubmit }) => {
         required={true}
       />
 
-      {/* <Input
-        id={numberInputId}
-        type={'tel'}
-        label={'Number'}
-        name={'number'}
-        placeholder={'+44-787-123-45-67'}
-        // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-        value={number}
-        onChange={handleInputValues}
-        title={
-          'Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +'
-        }
-        required={true}
-      /> */}
-
       <SubmitButtonStyled type="submit">Add contact</SubmitButtonStyled>
     </FormStyled>
   );
@@ -103,10 +99,15 @@ const ContactForm = ({ onSubmit }) => {
 
 ContactForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  contacts: PropTypes.array.isRequired,
 };
+
+const mapStateToProps = state => ({
+  contacts: state.contactList.contacts,
+});
 
 const mapDispatchToProps = dispatch => ({
   onSubmit: newContact => dispatch(contactsActions.addContact(newContact)),
 });
 
-export default connect(null, mapDispatchToProps)(ContactForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
